@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        .login-form {
+            max-width: 300px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
+        h1 {
+            text-align: center;
+            font-size: 24px;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .register-link {
+            text-align: center;
+            margin-top: 15px;
+        }
+        /* Стили для сообщений */
+        .messages {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 20px 0;
+        }
+        .messages li {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+        }
+        .success {
+            background-color: #dff0d8;
+            color: #3c763d;
+            border: 1px solid #d6e9c6;
+        }
+        .error {
+            background-color: #f2dede;
+            color: #a94442;
+            border: 1px solid #ebccd1;
+        }
+        .errorlist {
+            color: #a94442;
+            list-style: none;
+            padding: 0;
+            margin: 5px 0 0 0;
+            font-size: 0.9em;
+        }
+        /* Специальные стили для поля подтверждения пароля */
+        .confirm-password-error {
+            color: #a94442;
+            font-size: 0.9em;
+            margin-top: -5px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-form">
+        <h1>Регистрация</h1>
+
+        <!-- Блок для вывода системных сообщений -->
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        <form action="{% url 'register' %}" method="post">
+            {% csrf_token %}
+
+            <!-- Вывод общих ошибок формы -->
+            {% if form.non_field_errors %}
+            <div class="error">
+                {% for error in form.non_field_errors %}
+                {{ error }}
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <table>
+                {% for field in form %}
+                <tr>
+                    <td>{{ field.label_tag }}</td>
+                    <td>
+                        {{ field }}
+                        <!-- Вывод ошибок для каждого поля -->
+                        {% if field.errors %}
+                        <ul class="errorlist">
+                            {% for error in field.errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+                        <!-- Специальная обработка для поля подтверждения пароля -->
+                        {% if field.name == 'confirm_password' and form.non_field_errors %}
+                        <div class="confirm-password-error">
+                            {% for error in form.non_field_errors %}
+                            {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+            <input type="submit" value="Отправить">
+        </form>
+    </div>
+</body>
+</html>

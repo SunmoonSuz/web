@@ -5,6 +5,8 @@ from django.contrib.auth.hashers import make_password
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.views import View
+
+from .config import password
 from .forms import AuthorizationForm, RegistrationForm
 from django.contrib import messages
 from.models import UserMan
@@ -27,11 +29,16 @@ class MainPage(View):
         try:
             user = UserMan.objects.get(username=auth_form.cleaned_data['username'],
                                     email=auth_form.cleaned_data['email'])
-            if authorization.Authorization.check_password(user):
+
+            password = make_password(auth_form.cleaned_data['password'], salt="point")
+            if authorization.Authorization.check_password(user, password):
                 messages.success(request, "Вход прошёл успешно")
-                return redirect('/login')
+                return redirect(f'/login/{password[-16::]}')
         except Exception as e:
             messages.error(request, f"Ошибка авторизации: {str(e)}")
+            print("gg")
+            print(str(e))
+            return render(request, "main_page.html", {"form": auth_form})
 
 
 class RegistrationPage(View):
@@ -49,7 +56,7 @@ class RegistrationPage(View):
             UserMan(
                 username=reg_form.cleaned_data['username'],
                 email=reg_form.cleaned_data['email'],
-                password=make_password(reg_form.cleaned_data['password']),
+                password=make_password(reg_form.cleaned_data['password'], salt="point"),
                 is_active=True, date_joined=timezone.now()
 
             ).save()
@@ -65,8 +72,8 @@ class RegistrationPage(View):
             return redirect('register')
 
 
-def home_page(request):
-    return HttpResponse()
+def home_page(request, hash_pass):
+    return HttpResponse(f"<h2>Привет {hash_pass}</h2>")
 
 
 def create_task(request):

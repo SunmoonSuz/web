@@ -24,6 +24,7 @@ sys.path.append("..")
 urlpatterns = [
     path('authorization/', views.MainPage.as_view(), name="authorization"),
     path('register/', views.RegistrationPage.as_view(), name="register"),
-    path('login/<str:hash_pass>', views.home_page),
+    path('tasks/', views.home_page),
+    path('tasks/create/', views.create_task),
     path('admin/', admin.site.urls),
 ]

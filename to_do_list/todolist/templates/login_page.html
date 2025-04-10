@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список задач</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f7fa;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+        .task-list {
+            list-style: none;
+            padding: 0;
+        }
+        .task-item {
+            background: #f8f9fa;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .task-info {
+            flex-grow: 1;
+        }
+        .task-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        .task-description {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        .task-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        .btn-create {
+            background-color: #2ecc71;
+            color: white;
+            margin-bottom: 20px;
+        }
+        .btn-edit {
+            background-color: #3498db;
+            color: white;
+        }
+        .btn-delete {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        .empty-tasks {
+            text-align: center;
+            color: #7f8c8d;
+            padding: 30px 0;
+        }
+        .task-meta {
+            font-size: 0.8em;
+            color: #95a5a6;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Мои задачи</h1>
+
+        <a href="/tasks/create/?hash={{hash}}&id={{id}}" class="btn btn-create">+ Создать задачу</a>
+
+        {% if tasks %}
+        <ul class="task-list">
+            {% for task in tasks %}
+            <li class="task-item">
+                <div class="task-info">
+                    <div class="task-user">{{ task.user }}</div>
+                    <div class="task-description">{{ task.description }}</div>
+                    <div class="task-title">{{ task.title }}</div>
+                    <div class="task-completed">{{ task.completed }}</div>
+                    <div class="task-created-at">{{ task.created_at }}</div>
+                    <div class="task-updated-at">{{ task.updated_at }}</div>
+                    <div class="task-duo-date">{{ task.due_date }}</div>
+                    <div class="task-priority">{{ task.priority }}</div>
+                </div>
+                <div class="task-actions">
+                    <a href="/tasks/edit/{{ task.id }}/" class="btn btn-edit">✏️ Редактировать</a>
+                    <a href="/tasks/delete/{{ task.id }}/" class="btn btn-delete">🗑️ Удалить</a>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <div class="empty-tasks">
+            У вас пока нет задач. Нажмите "Создать задачу", чтобы добавить первую.
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

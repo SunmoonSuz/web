@@ -1,6 +1,8 @@
+from email.policy import default
+
 from django import forms
 from django.core.exceptions import ValidationError
-
+from.models import Task
 
 class RegistrationForm(forms.Form):
     email = forms.EmailField()
@@ -23,3 +25,14 @@ class AuthorizationForm(forms.Form):
     username = forms.CharField(min_length=3, max_length=10)
     password = forms.CharField(min_length=4)
 
+class TaskForm(forms.Form):
+    title = forms.CharField(max_length=200)
+    description = forms.CharField(required=False)
+    due_date = forms.DateTimeField(
+        input_formats=['%d.%m.%Y %H:%M', '%Y-%m-%d %H:%M'],
+        widget=forms.TextInput(attrs={
+            'class': 'datetime-input',
+            'placeholder': 'ДД.ММ.ГГГГ ЧЧ:ММ'
+        })
+    )
+    priority = forms.IntegerField()

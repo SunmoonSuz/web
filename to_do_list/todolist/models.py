@@ -17,12 +17,11 @@ class Task(models.Model):
     user = models.ForeignKey(UserMan, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
-    completed = models.BooleanField()
+    completed = models.BooleanField(default=False)
     created_at = models.DateTimeField()
     updated_at = models.DateTimeField()
-    due_date = models.DateTimeField(null=True)
     priority = models.IntegerField(default=0, choices=((i, i) for i in range(1, 6)))
-
+    due_date = models.DateTimeField()
 class Category(models.Model):
     user = models.ForeignKey(UserMan, on_delete=models.CASCADE)
     name = models.CharField()

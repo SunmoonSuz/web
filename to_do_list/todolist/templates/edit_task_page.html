@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редактировать задачу</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f7fa;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+        input[type="text"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        .btn-submit {
+            background-color: #2ecc71;
+            color: white;
+            width: 100%;
+        }
+        .btn-submit:hover {
+            background-color: #27ae60;
+        }
+        .btn-back {
+            display: inline-block;
+            margin-top: 15px;
+            background-color: #95a5a6;
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+        }
+        .btn-back:hover {
+            background-color: #7f8c8d;
+        }
+        .errorlist {
+            color: #e74c3c;
+            list-style: none;
+            padding: 0;
+            margin: 5px 0 0 0;
+            font-size: 0.9em;
+        }
+        .field-error {
+            border-color: #e74c3c !important;
+        }
+        .messages {
+            margin-bottom: 20px;
+        }
+        .alert {
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+        .alert-error {
+            background-color: #fdecea;
+            color: #e74c3c;
+            border: 1px solid #f5c6cb;
+        }
+        .alert-success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #c8e6c9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Редактировать задачу</h1>
+
+        <!-- Вывод системных сообщений -->
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <!-- Вывод общих ошибок формы -->
+            {% if form.non_field_errors %}
+            <div class="alert alert-error">
+                {% for error in form.non_field_errors %}
+                {{ error }}
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="form-group">
+                <label for="id_title">Название задачи*</label>
+                {{ form.title }}
+                {% if form.title.errors %}
+                <ul class="errorlist">
+                    {% for error in form.title.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="id_description">Описание</label>
+                {{ form.description }}
+                {% if form.description.errors %}
+                <ul class="errorlist">
+                    {% for error in form.description.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="id_priority">Приоритет</label>
+                {{ form.priority }}
+            </div>
+
+            <div class="form-group">
+                <label for="id_due_date">Срок выполнения</label>
+                {{ form.due_date }}
+                <small style="display: block; margin-top: 5px; color: #7f8c8d;"></small>
+            </div>
+
+
+            <button type="submit" class="btn btn-submit">Редактировать задачу</button>
+        </form>
+
+        <a href="/tasks/{{id}}?hash={{hash}}" class="btn btn-back">← Назад к списку задач</a>
+    </div>
+
+    <script>
+        // Добавляем класс ошибки к полям с ошибками
+        document.addEventListener('DOMContentLoaded', function() {
+            const errorFields = document.querySelectorAll('.errorlist');
+            errorFields.forEach(function(errorList) {
+                const inputId = errorList.previousElementSibling.id;
+                if (inputId) {
+                    const input = document.getElementById(inputId);
+                    if (input) {
+                        input.classList.add('field-error');
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

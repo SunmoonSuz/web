@@ -40,7 +40,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'todolist',
+<<<<<<< HEAD
     'debug_toolbar',
+=======
+>>>>>>> 671a07a4004e36d1a83fcc188ca86a52831239ae
 ]
 
 MIDDLEWARE = [
@@ -48,11 +51,17 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+<<<<<<< HEAD
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
+=======
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+>>>>>>> 671a07a4004e36d1a83fcc188ca86a52831239ae
 ]
 
 ROOT_URLCONF = 'to_do_list.urls'
@@ -81,7 +90,11 @@ WSGI_APPLICATION = 'to_do_list.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
+<<<<<<< HEAD
         'NAME': 'postgres',
+=======
+        'NAME': 'new_db',
+>>>>>>> 671a07a4004e36d1a83fcc188ca86a52831239ae
         'USER': 'postgres',
         'PASSWORD': 'dbweb123',
         'HOST': 'localhost',
@@ -89,6 +102,7 @@ DATABASES = {
     }
 }
 
+<<<<<<< HEAD
 # CACHES dictionary which contains caching configurations.
 CACHES = {
     "default": {
@@ -104,6 +118,8 @@ INTERNAL_IPS = [
     # ...
     '127.0.0.1',  # Add your development machine's IP address here
 ]
+=======
+>>>>>>> 671a07a4004e36d1a83fcc188ca86a52831239ae
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators

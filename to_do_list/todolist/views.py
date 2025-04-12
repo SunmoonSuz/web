@@ -10,8 +10,13 @@ from.models import UserMan, Task, Category
 from.services import authorization
 from django.utils.decorators import method_decorator
 from django.utils import timezone
+<<<<<<< HEAD
 from django.core.paginator import Paginator
 
+=======
+from rest_framework import viewsets
+from .serializers import TaskSerializer
+>>>>>>> 671a07a4004e36d1a83fcc188ca86a52831239ae
 # Create your views here.
 
 
@@ -72,6 +77,7 @@ class RegistrationPage(View):
 
 def home_page(request, user_id):
     hash = request.GET.get("hash")
+<<<<<<< HEAD
     page = request.GET.get("page")
 
     current_user = UserMan.objects.get(id=user_id)
@@ -80,6 +86,11 @@ def home_page(request, user_id):
     page_obj = paginator.get_page(page)
     return render(request, "login_page.html",
                   {"hash": hash, "id": user_id, "page_obj": page_obj})
+=======
+    current_user = UserMan.objects.get(id=user_id)
+    tasks = Task.objects.filter(user=current_user)
+    return render(request, "login_page.html", {"tasks": tasks, "hash": hash, "id": user_id})
+>>>>>>> 671a07a4004e36d1a83fcc188ca86a52831239ae
 
 
 def create_task(request, user_id):
@@ -147,6 +158,7 @@ def edit_task(request, user_id, task_id):
     task_form.save()
     task.due_date = timezone.now()
     task.save()
+<<<<<<< HEAD
     return redirect(f"http://127.0.0.1:8000/tasks/{user_id}?hash={hash}")
 
 def read_task(request, user_id, task_id):
@@ -166,3 +178,12 @@ def delete_task(request, user_id, task_id):
         return JsonResponse('User does not exist', status=403)
     Task.objects.filter(user=curr_user, id=task_id).delete()
     return redirect(f"http://127.0.0.1:8000/tasks/{user_id}?hash={hash}")
+=======
+    return redirect(f'http://127.0.0.1:8000/tasks/{user_id}?hash={hash}')
+
+def read_task(request):
+    return render()
+
+def delete_task(request):
+    return render()
+>>>>>>> 671a07a4004e36d1a83fcc188ca86a52831239ae

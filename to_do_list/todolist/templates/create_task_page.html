@@ -122,7 +122,11 @@
         <form method="POST">
             {% csrf_token %}
 
+<<<<<<< HEAD
 
+=======
+            <!-- Вывод общих ошибок формы -->
+>>>>>>> 671a07a4004e36d1a83fcc188ca86a52831239ae
             {% if form.non_field_errors %}
             <div class="alert alert-error">
                 {% for error in form.non_field_errors %}

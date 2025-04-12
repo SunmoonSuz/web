@@ -88,6 +88,7 @@
             font-size: 0.8em;
             color: #95a5a6;
             margin-top: 5px;
+<<<<<<< HEAD
 }
 .pagination {
     display: flex;
@@ -109,6 +110,9 @@
 .pagination .current {
        background-color: #f8f8f8;
 }
+=======
+        }
+>>>>>>> 671a07a4004e36d1a83fcc188ca86a52831239ae
     </style>
 </head>
 <body>
@@ -117,9 +121,15 @@
 
         <a href="/tasks/{{id}}/create/?hash={{hash}}" class="btn btn-create">+ Создать задачу</a>
 
+<<<<<<< HEAD
         {% if page_obj %}
         <ul class="task-list">
             {% for task in page_obj %}
+=======
+        {% if tasks %}
+        <ul class="task-list">
+            {% for task in tasks %}
+>>>>>>> 671a07a4004e36d1a83fcc188ca86a52831239ae
             <li class="task-item">
                 <div class="task-info">
                     <div class="task-title">{{ task.title }}</div>
@@ -127,13 +137,19 @@
                     <div class="task-priority"><p>Приоритет: {{ task.priority }}</p></div>
                 </div>
                 <div class="task-actions">
+<<<<<<< HEAD
                     <a href="/tasks/{{  id  }}/read/{{  task.id  }}?hash={{  hash  }}/" class="btn btn-edit">📖 Читать</a>
                     <a href="/tasks/{{  id  }}/edit/{{  task.id  }}?hash={{  hash  }}/" class="btn btn-edit">✏️ Редактировать</a>
                     <a href="/tasks/{{  id  }}/delete/{{ task.id }}?hash={{  hash  }}/" class="btn btn-delete">🗑️ Удалить</a>
+=======
+                    <a href="/tasks/{{id}}/edit/{{task.id}}?hash={{hash}}/" class="btn btn-edit">✏️ Редактировать</a>
+                    <a href="/tasks/delete/{{ task.id }}/" class="btn btn-delete">🗑️ Удалить</a>
+>>>>>>> 671a07a4004e36d1a83fcc188ca86a52831239ae
                 </div>
             </li>
             {% endfor %}
         </ul>
+<<<<<<< HEAD
         <div class="pagination">
     <span class="step-links">
         {% if page_obj.has_previous %}
@@ -151,6 +167,8 @@
         {% endif %}
     </span>
 </div>
+=======
+>>>>>>> 671a07a4004e36d1a83fcc188ca86a52831239ae
         {% else %}
         <div class="empty-tasks">
             У вас пока нет задач. Нажмите "Создать задачу", чтобы добавить первую.

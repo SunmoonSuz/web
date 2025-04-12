@@ -95,24 +95,19 @@
     <div class="container">
         <h1>Мои задачи</h1>
 
-        <a href="/tasks/create/?hash={{hash}}&id={{id}}" class="btn btn-create">+ Создать задачу</a>
+        <a href="/tasks/{{id}}/create/?hash={{hash}}" class="btn btn-create">+ Создать задачу</a>
 
         {% if tasks %}
         <ul class="task-list">
             {% for task in tasks %}
             <li class="task-item">
                 <div class="task-info">
-                    <div class="task-user">{{ task.user }}</div>
-                    <div class="task-description">{{ task.description }}</div>
                     <div class="task-title">{{ task.title }}</div>
-                    <div class="task-completed">{{ task.completed }}</div>
-                    <div class="task-created-at">{{ task.created_at }}</div>
-                    <div class="task-updated-at">{{ task.updated_at }}</div>
-                    <div class="task-duo-date">{{ task.due_date }}</div>
-                    <div class="task-priority">{{ task.priority }}</div>
+                    <div class="task-duo-date"><p>Дата окончания: {{ task.due_date }}</p></div>
+                    <div class="task-priority"><p>Приоритет: {{ task.priority }}</p></div>
                 </div>
                 <div class="task-actions">
-                    <a href="/tasks/edit/{{ task.id }}/" class="btn btn-edit">✏️ Редактировать</a>
+                    <a href="/tasks/{{id}}/edit/{{task.id}}?hash={{hash}}/" class="btn btn-edit">✏️ Редактировать</a>
                     <a href="/tasks/delete/{{ task.id }}/" class="btn btn-delete">🗑️ Удалить</a>
                 </div>
             </li>

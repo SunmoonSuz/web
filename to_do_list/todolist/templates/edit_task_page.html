@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Создать задачу</title>
+    <title>Редактировать задачу</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -108,7 +108,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Создать новую задачу</h1>
+        <h1>Редактировать задачу</h1>
 
         <!-- Вывод системных сообщений -->
         {% if messages %}
@@ -167,7 +167,7 @@
             </div>
 
 
-            <button type="submit" class="btn btn-submit">Создать задачу</button>
+            <button type="submit" class="btn btn-submit">Редактировать задачу</button>
         </form>
 
         <a href="/tasks/{{id}}?hash={{hash}}" class="btn btn-back">← Назад к списку задач</a>

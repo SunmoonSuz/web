@@ -1,20 +1,17 @@
-from asyncio import current_task
-
 from django.db import IntegrityError
-from django.template.context_processors import request
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth.hashers import make_password
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.views import View
-
-from .config import password
 from .forms import AuthorizationForm, RegistrationForm, TaskForm
 from django.contrib import messages
 from.models import UserMan, Task, Category
 from.services import authorization
 from django.utils.decorators import method_decorator
 from django.utils import timezone
+from rest_framework import viewsets
+from .serializers import TaskSerializer
 # Create your views here.
 
 
@@ -35,7 +32,7 @@ class MainPage(View):
             password = make_password(auth_form.cleaned_data['password'], salt="point")
             if authorization.Authorization.check_password(user, password):
                 messages.success(request, "Вход прошёл успешно")
-                return redirect(f'/tasks/?hash={password[-16::]}&id={user_id}')
+                return redirect(f'/tasks/{user_id}?hash={password[-16::]}')
         except Exception as e:
             messages.error(request, f"Ошибка авторизации: {str(e)}")
             return render(request, "main_page.html", {"form": auth_form})
@@ -72,17 +69,16 @@ class RegistrationPage(View):
             return redirect('register')
 
 
-def home_page(request):
+
+def home_page(request, user_id):
     hash = request.GET.get("hash")
-    user_id = request.GET.get("id")
     current_user = UserMan.objects.get(id=user_id)
     tasks = Task.objects.filter(user=current_user)
     return render(request, "login_page.html", {"tasks": tasks, "hash": hash, "id": user_id})
 
 
-def create_task(request):
+def create_task(request, user_id):
     hash = request.GET.get("hash")
-    user_id = request.GET.get("id")
 
     try:
         current_user = UserMan.objects.get(id=user_id)
@@ -95,11 +91,9 @@ def create_task(request):
         return render(request, "create_task_page.html",
                       {"form": task_form, "hash": hash, "id": user_id})
 
-
     task_form = TaskForm(request.POST)
-    print(task_form)
-    print(timezone.now())
     if not task_form.is_valid():
+        print(task_form)
         messages.error(request, "Исправьте ошибки в форме")
         return render(request, "create_task_page.html",
                       {"form": task_form, "hash": hash, "id": user_id})
@@ -117,7 +111,7 @@ def create_task(request):
         )
         curr_task.save()
 
-        response = redirect(f'/tasks/?hash={hash}&id={user_id}')
+        response = redirect(f'/tasks/{user_id}?hash={hash}')
         response.set_cookie('new_task', 'true', max_age=86400)
         return response
 
@@ -126,8 +120,32 @@ def create_task(request):
         return render(request, "create_task_page.html",
                       {"form": task_form, "hash": hash, "id": user_id})
 
-def edit_task(request):
-    return HttpResponse()
+def edit_task(request, user_id, task_id):
+    hash = request.POST.get("hash")
+    try:
+        current_user = UserMan.objects.get(id=user_id)
+    except UserMan.DoesNotExist:
+        messages.error(request, "Пользователь не найден")
+        return JsonResponse('User does not exist', status=403)
+
+    task = Task.objects.get(user = current_user, id=task_id)
+    if request.method != "POST":
+        task_form = TaskForm(instance=task)
+        return render(request, "edit_task_page.html", {"form": task_form, "id": user_id, "hash": hash})
+
+    task_form = TaskForm(request.POST, instance=task)
+    if not task_form.is_valid():
+        messages.error(request, "Исправьте ошибки в форме")
+        return render(request, "edit_task_page.html",
+                      {"form": task_form, "hash": hash, "id": user_id})
+
+    task_form.save()
+    task.due_date = timezone.now()
+    task.save()
+    return redirect(f'http://127.0.0.1:8000/tasks/{user_id}?hash={hash}')
 
 def read_task(request):
-    return HttpResponse()
+    return render()
+
+def delete_task(request):
+    return render()

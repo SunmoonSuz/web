@@ -25,14 +25,16 @@ class AuthorizationForm(forms.Form):
     username = forms.CharField(min_length=3, max_length=10)
     password = forms.CharField(min_length=4)
 
-class TaskForm(forms.Form):
-    title = forms.CharField(max_length=200)
-    description = forms.CharField(required=False)
-    due_date = forms.DateTimeField(
-        input_formats=['%d.%m.%Y %H:%M', '%Y-%m-%d %H:%M'],
-        widget=forms.TextInput(attrs={
-            'class': 'datetime-input',
-            'placeholder': 'ДД.ММ.ГГГГ ЧЧ:ММ'
-        })
-    )
-    priority = forms.IntegerField()
+class TaskForm(forms.ModelForm):
+    class Meta:
+        model = Task
+        fields = ['title', 'description', 'priority', 'due_date']
+        widgets = {
+            'due_date': forms.DateTimeInput(
+                attrs={
+                    'type': 'datetime-local',  # HTML5 datetime input
+                    'class': 'form-control',  # CSS класс
+                    'placeholder': 'YYYY-MM-DD HH:MM'
+                }
+            )
+        }

@@ -88,6 +88,27 @@
             font-size: 0.8em;
             color: #95a5a6;
             margin-top: 5px;
+}
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    margin: 2rem 0;
+}
+
+.pagination a, .pagination span {
+    display: inline-block;
+    padding: 4px 8px;
+    text-decoration: none;
+    color: #555;
+    border: 1px solid #eee;
+    border-radius: 2px;
+    font-size: 12px;
+}
+
+.pagination .current {
+       background-color: #f8f8f8;
+}
         }
     </style>
 </head>
@@ -97,9 +118,12 @@
 
         <a href="/tasks/{{id}}/create/?hash={{hash}}" class="btn btn-create">+ Создать задачу</a>
 
-        {% if tasks %}
+
+        {% if page_obj %}
         <ul class="task-list">
-            {% for task in tasks %}
+            {% for task in page_obj %}
+
+
             <li class="task-item">
                 <div class="task-info">
                     <div class="task-title">{{ task.title }}</div>
@@ -107,12 +131,30 @@
                     <div class="task-priority"><p>Приоритет: {{ task.priority }}</p></div>
                 </div>
                 <div class="task-actions">
-                    <a href="/tasks/{{id}}/edit/{{task.id}}?hash={{hash}}/" class="btn btn-edit">✏️ Редактировать</a>
-                    <a href="/tasks/delete/{{ task.id }}/" class="btn btn-delete">🗑️ Удалить</a>
+                    <a href="/tasks/{{  id  }}/read/{{  task.id  }}?hash={{  hash  }}" class="btn btn-edit">📖 Читать</a>
+                    <a href="/tasks/{{  id  }}/edit/{{  task.id  }}?hash={{  hash  }}" class="btn btn-edit">✏️ Редактировать</a>
+                    <a href="/tasks/{{  id  }}/delete/{{ task.id }}?hash={{  hash  }}" class="btn btn-delete">🗑️ Удалить</a>
                 </div>
             </li>
             {% endfor %}
         </ul>
+        <div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?hash={{hash}}&page=1">&laquo; первая</a>
+            <a href="?hash={{hash}}&page={{ page_obj.previous_page_number }}">предыдущая</a>
+        {% endif %}
+
+        <span class="current">
+            Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?hash={{hash}}&page={{ page_obj.next_page_number }}">следующая</a>
+            <a href="?hash={{hash}}&page={{ page_obj.paginator.num_pages }}">последняя &raquo;</a>
+        {% endif %}
+    </span>
+</div>
         {% else %}
         <div class="empty-tasks">
             У вас пока нет задач. Нажмите "Создать задачу", чтобы добавить первую.

@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'todolist',
+    'debug_toolbar',
+
 ]
 
 MIDDLEWARE = [
@@ -47,9 +49,11 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 ]
 
 ROOT_URLCONF = 'to_do_list.urls'
@@ -78,13 +82,32 @@ WSGI_APPLICATION = 'to_do_list.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'new_db',
+
+        'NAME': 'main_db',
+
         'USER': 'postgres',
         'PASSWORD': 'dbweb123',
         'HOST': 'localhost',
         'PORT': '',
     }
 }
+
+
+# CACHES dictionary which contains caching configurations.
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
+INTERNAL_IPS = [
+    # ...
+    '127.0.0.1',  # Add your development machine's IP address here
+]
 
 
 # Password validation

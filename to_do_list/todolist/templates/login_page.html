@@ -88,6 +88,7 @@
             font-size: 0.8em;
             color: #95a5a6;
             margin-top: 5px;
+
 }
 .pagination {
     display: flex;
@@ -109,7 +110,7 @@
 .pagination .current {
        background-color: #f8f8f8;
 }
-        }
+
     </style>
 </head>
 <body>
@@ -123,7 +124,6 @@
         <ul class="task-list">
             {% for task in page_obj %}
 
-
             <li class="task-item">
                 <div class="task-info">
                     <div class="task-title">{{ task.title }}</div>
@@ -131,13 +131,17 @@
                     <div class="task-priority"><p>Приоритет: {{ task.priority }}</p></div>
                 </div>
                 <div class="task-actions">
+
                     <a href="/tasks/{{  id  }}/read/{{  task.id  }}?hash={{  hash  }}" class="btn btn-edit">📖 Читать</a>
                     <a href="/tasks/{{  id  }}/edit/{{  task.id  }}?hash={{  hash  }}" class="btn btn-edit">✏️ Редактировать</a>
                     <a href="/tasks/{{  id  }}/delete/{{ task.id }}?hash={{  hash  }}" class="btn btn-delete">🗑️ Удалить</a>
+
+
                 </div>
             </li>
             {% endfor %}
         </ul>
+
         <div class="pagination">
     <span class="step-links">
         {% if page_obj.has_previous %}
@@ -154,12 +158,13 @@
             <a href="?hash={{hash}}&page={{ page_obj.paginator.num_pages }}">последняя &raquo;</a>
         {% endif %}
     </span>
-</div>
+
         {% else %}
         <div class="empty-tasks">
             У вас пока нет задач. Нажмите "Создать задачу", чтобы добавить первую.
         </div>
         {% endif %}
-    </div>
+
+
 </body>
 </html>

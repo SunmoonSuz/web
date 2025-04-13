@@ -53,7 +53,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
 ]
 
 ROOT_URLCONF = 'to_do_list.urls'
@@ -82,9 +81,7 @@ WSGI_APPLICATION = 'to_do_list.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-
         'NAME': 'main_db',
-
         'USER': 'postgres',
         'PASSWORD': 'dbweb123',
         'HOST': 'localhost',
@@ -108,6 +105,8 @@ INTERNAL_IPS = [
     # ...
     '127.0.0.1',  # Add your development machine's IP address here
 ]
+
+
 
 
 # Password validation

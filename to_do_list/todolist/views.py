@@ -11,6 +11,10 @@ from .services import authorization, model_operation, access
 from django.utils.decorators import method_decorator
 from django.core.paginator import Paginator
 from django.core.cache import cache
+from django.utils import timezone
+from django.core.paginator import Paginator
+
+
 # Create your views here.
 
 
@@ -54,6 +58,7 @@ class RegistrationPage(View):
 
 def home_page(request, user_id):
     hash = request.GET.get("hash")
+
     try:
         access.access(hash, user_id)
     except ValueError as e:
@@ -66,10 +71,16 @@ def home_page(request, user_id):
         current_user = model_operation.take_object(UserMan, user_id, None)
         tasks = Task.objects.filter(user=current_user)
         cache.set("task_list", tasks, timeout=60)
+
+    page = request.GET.get("page")
+
+
+
     paginator = Paginator(tasks, 5)
     page_obj = paginator.get_page(page)
     return render(request, "login_page.html",
                   {"hash": hash, "id": user_id, "page_obj": page_obj})
+
 
 def create_task(request, user_id):
     hash = request.GET.get("hash")
@@ -131,6 +142,7 @@ def edit_task(request, user_id, task_id):
     cache.delete("task_list")
     return redirect(f"http://127.0.0.1:8000/tasks/{user_id}?hash={hash}")
 
+
 def read_task(request, user_id, task_id):
     hash = request.GET.get("hash")
     try:
@@ -166,5 +178,8 @@ def delete_task(request, user_id, task_id):
     task.delete()
     cache.delete("task_list")
     return redirect(f"http://127.0.0.1:8000/tasks/{user_id}?hash={hash}/")
+
+
+
 
 

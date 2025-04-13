@@ -66,7 +66,6 @@
             margin: 5px 0 0 0;
             font-size: 0.9em;
         }
-        /* Специальные стили для поля подтверждения пароля */
         .confirm-password-error {
             color: #a94442;
             font-size: 0.9em;
@@ -79,7 +78,7 @@
     <div class="login-form">
         <h1>Регистрация</h1>
 
-        <!-- Блок для вывода системных сообщений -->
+
         {% if messages %}
         <ul class="messages">
             {% for message in messages %}
@@ -91,7 +90,7 @@
         <form action="{% url 'register' %}" method="post">
             {% csrf_token %}
 
-            <!-- Вывод общих ошибок формы -->
+
             {% if form.non_field_errors %}
             <div class="error">
                 {% for error in form.non_field_errors %}
@@ -106,7 +105,7 @@
                     <td>{{ field.label_tag }}</td>
                     <td>
                         {{ field }}
-                        <!-- Вывод ошибок для каждого поля -->
+
                         {% if field.errors %}
                         <ul class="errorlist">
                             {% for error in field.errors %}
@@ -114,7 +113,7 @@
                             {% endfor %}
                         </ul>
                         {% endif %}
-                        <!-- Специальная обработка для поля подтверждения пароля -->
+
                         {% if field.name == 'confirm_password' and form.non_field_errors %}
                         <div class="confirm-password-error">
                             {% for error in form.non_field_errors %}

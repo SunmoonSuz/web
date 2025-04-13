@@ -15,8 +15,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+
 import debug_toolbar
 from django.urls import path, include
+from django.urls import path, include
+from todolist import views
+import debug_toolbar
+from django.urls import path
 from todolist import views
 import sys
 
@@ -32,5 +37,4 @@ urlpatterns = [
     path('tasks/<int:user_id>/read/<int:task_id>/', views.read_task, name="read_task"),
     path('admin/', admin.site.urls),
     path('__debug__/', include(debug_toolbar.urls)),
-
 ]

@@ -95,7 +95,7 @@
     <div class="login-container">
         <h1>Авторизация</h1>
 
-        <!-- Вывод сообщений -->
+
         {% if messages %}
         <div class="messages">
             {% for message in messages %}
@@ -107,7 +107,7 @@
         <form method="POST">
             {% csrf_token %}
 
-            <!-- Вывод ошибок формы -->
+
             {% if form.non_field_errors %}
             <div class="alert alert-error">
                 {% for error in form.non_field_errors %}

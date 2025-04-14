@@ -2,7 +2,7 @@
 services:
   web:
     build: .
-    command: bash -c "python manage.py makemigrations && python manage.py migrate && gunicorn --bind 0.0.0.0:8000 to_do_list.wsgi:application"
+    command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py test todolist.tests && gunicorn --bind 0.0.0.0:8000 to_do_list.wsgi:application "
     volumes:
       - .:/todolist
     ports:

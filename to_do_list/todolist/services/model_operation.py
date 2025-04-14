@@ -12,11 +12,11 @@ def take_object(type_object: Model, user_id: int, task_id: int | None):
         if type_object == UserMan:
             object = type_object.objects.get(id=user_id)
         elif type_object == Task:
-            task = cache.get("task")
+            task = cache.get(f"task{task_id}")
             if not task:
                 current_user = UserMan.objects.get(id=user_id)
                 object = type_object.objects.get(user=current_user, id=task_id)
-                cache.set("task", task, timeout=60)
+                cache.set(f"task{task_id}", task, timeout=60)
         else:
             raise ValueError("Model isn't find")
     except type_object.DoesNotExist:
@@ -44,15 +44,18 @@ class TaskOperation:
             curr_task.save()
         except Exception as e:
             raise e
+        cache.delete("task_list")
+
 
 
     @staticmethod
-    def edit_task(form: TaskForm, task: Task):
+    def edit_task(form: TaskForm, task: Task, task_id: int):
         if not form.is_valid():
             raise ValidationError("Form is not valid")
         form.save()
         task.due_date = timezone.now()
         task.save()
+        cache.delete(f"task{task_id}")
         cache.delete("task_list")
 
 

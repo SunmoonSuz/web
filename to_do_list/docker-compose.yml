@@ -1,0 +1,38 @@
+
+services:
+  web:
+    build: .
+    command: bash -c "python manage.py makemigrations && python manage.py migrate && gunicorn --bind 0.0.0.0:8000 to_do_list.wsgi:application"
+    volumes:
+      - .:/todolist
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - redis
+
+  db:
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d main_db" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    image: postgres:16
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+
+  redis:
+    image: redis:6
+    command: redis-server --maxmemory 256mb
+    volumes:
+      - redis_data:/data
+
+volumes:
+  postgres_data:
+  redis_data:

@@ -108,7 +108,7 @@ def create_task(request, user_id):
                       {"form": task_form, "hash": hash, "id": user_id})
     response = redirect(f'/tasks/{user_id}?hash={hash}')
     response.set_cookie('new_task', 'true', max_age=86400)
-    cache.delete("task_list")
+
     return response
 
 
@@ -131,7 +131,7 @@ def edit_task(request, user_id, task_id):
         return render(request, "edit_task_page.html", {"form": task_form, "id": user_id, "hash": hash})
     task_form = TaskForm(request.POST, instance=task)
     try:
-        model_operation.TaskOperation.edit_task(task_form, task)
+        model_operation.TaskOperation.edit_task(task_form, task, task_id)
     except ValidationError as e:
         messages.error(request, f"Исправьте ошибки в форме: {str(e)}")
         return render(request, "edit_task_page.html", {"form": task_form, "id": user_id, "hash": hash})
@@ -169,8 +169,9 @@ def delete_task(request, user_id, task_id):
         messages.error(request, str(e))
         return JsonResponse(str(e), status=404)
     task.delete()
+    cache.delete(f"task{user_id}")
     cache.delete("task_list")
-    return redirect(f"http://127.0.0.1:8000/tasks/{user_id}?hash={hash}/")
+    return redirect(f"http://127.0.0.1:8000/tasks/{user_id}?hash={hash}")
 
 
 

@@ -4,11 +4,11 @@ from rest_framework.exceptions import ValidationError
 
 from ..forms import AuthorizationForm
 from ..models import UserMan
-
+from typing import Optional, Dict
 
 class Authorization:
     @staticmethod
-    def check_password(user: models.UserMan, password: str):
+    def check_password(user: models.UserMan, password: str) -> bool:
         user_password = make_password(password, salt="point")
         try:
             if user_password == user.password:
@@ -18,10 +18,9 @@ class Authorization:
         except Exception as e:
             raise e
     @staticmethod
-    def entrance(form: AuthorizationForm):
+    def entrance(form: AuthorizationForm) -> tuple[int, str]:
         if not form.is_valid():
             raise ValidationError
-
         try:
             user = UserMan.objects.get(username=form.cleaned_data['username'],
                                     email=form.cleaned_data['email'])

@@ -4,8 +4,8 @@ from django.db import models
 
 # Create your models here.
 class UserMan(models.Model):
-    username = models.CharField()
-    email = models.EmailField()
+    username = models.CharField(unique=True)
+    email = models.EmailField(unique=True)
     password = models.CharField()
     is_active = models.BooleanField()
     date_joined = models.DateTimeField()

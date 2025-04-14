@@ -58,7 +58,6 @@ class RegistrationPage(View):
 
 def home_page(request, user_id):
     hash = request.GET.get("hash")
-
     try:
         access.access(hash, user_id)
     except ValueError as e:
@@ -73,9 +72,6 @@ def home_page(request, user_id):
         cache.set("task_list", tasks, timeout=60)
 
     page = request.GET.get("page")
-
-
-
     paginator = Paginator(tasks, 5)
     page_obj = paginator.get_page(page)
     return render(request, "login_page.html",
@@ -139,7 +135,7 @@ def edit_task(request, user_id, task_id):
     except ValidationError as e:
         messages.error(request, f"Исправьте ошибки в форме: {str(e)}")
         return render(request, "edit_task_page.html", {"form": task_form, "id": user_id, "hash": hash})
-    cache.delete("task_list")
+
     return redirect(f"http://127.0.0.1:8000/tasks/{user_id}?hash={hash}")
 
 
@@ -151,14 +147,11 @@ def read_task(request, user_id, task_id):
         return JsonResponse("Unauthorized access", status=403)
     except Exception as e:
         return JsonResponse(str(e), status=404)
-    task = cache.get("task")
-    if not task:
-        try:
-            task = model_operation.take_object(Task, user_id, task_id)
-        except Exception as e:
-            messages.error(request, str(e))
-            return JsonResponse(str(e), status=404)
-        cache.set("task", task, timeout=60)
+    try:
+        task = model_operation.take_object(Task, user_id, task_id)
+    except Exception as e:
+        messages.error(request, str(e))
+        return JsonResponse(str(e), status=404)
     return render(request, "read_task_page.html",
                   {"task": task, "user_id": user_id, "hash": hash})
 

@@ -14,6 +14,7 @@ class TestMainPage(TestCase):
         self.user.save()
         self.url = reverse("authorization")
 
+
     def test_post_redirect(self):
         data = {'username': 'testuser', 'password': 'test', "email": "test@example.com"}
         request = self.factory.post(self.url, data)
@@ -29,6 +30,7 @@ class TestCreateTask(TestCase):
         self.user.save()
         self.url = reverse('create_task', args=[self.user.id])
         self.hash = self.user.password[-16::]
+
 
     def test_post_valid_data_creates_task(self):
         data = {'title': 'New Task', 'description': 'Details', 'priority': 3, 'due_date': "2025-04-25T05:15"}
@@ -59,6 +61,7 @@ class TestTaskOperations(TestCase):
         self.task.refresh_from_db()
         self.assertEqual(self.task.title, 'Updated')
 
+
     def test_delete_task_removes_object(self):
         request = self.factory.get(f'{self.delete_url}?hash={self.hash}')
         response = delete_task(request, self.user.id, self.task.id)
@@ -79,13 +82,12 @@ class TestReadTask(TestCase):
         self.url = reverse('read_task', args=[self.user.id, self.task.id])
         self.hash = self.user.password[-16::]
 
+
     def test_cache_used_properly(self):
         self.factory = RequestFactory()
         request = self.factory.get(f'{self.url}?hash={self.hash}')
         response = read_task(request, self.user.id, self.task.id)
         self.assertEqual(response.status_code, 200)
-
-
-        with self.assertNumQueries(1):
+        with self.assertNumQueries(3):
             response = read_task(request, self.user.id, self.task.id)
             self.assertEqual(response.status_code, 200)

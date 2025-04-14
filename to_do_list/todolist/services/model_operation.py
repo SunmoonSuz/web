@@ -5,15 +5,18 @@ from django.core.exceptions import ValidationError
 from django.db.models import Model
 from ..models import UserMan, Task
 from ..forms import TaskForm, RegistrationForm
-
+from django.core.cache import cache
 
 def take_object(type_object: Model, user_id: int, task_id: int | None):
     try:
         if type_object == UserMan:
             object = type_object.objects.get(id=user_id)
         elif type_object == Task:
-            current_user = UserMan.objects.get(id=user_id)
-            object = type_object.objects.get(user=current_user, id=task_id)
+            task = cache.get("task")
+            if not task:
+                current_user = UserMan.objects.get(id=user_id)
+                object = type_object.objects.get(user=current_user, id=task_id)
+                cache.set("task", task, timeout=60)
         else:
             raise ValueError("Model isn't find")
     except type_object.DoesNotExist:
@@ -50,6 +53,7 @@ class TaskOperation:
         form.save()
         task.due_date = timezone.now()
         task.save()
+        cache.delete("task_list")
 
 
 class UserOperation:

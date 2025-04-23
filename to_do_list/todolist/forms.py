@@ -27,7 +27,7 @@ class AuthorizationForm(forms.Form):
 class TaskForm(forms.ModelForm):
     class Meta:
         model = Task
-        fields = ['title', 'description', 'priority', 'due_date']
+        fields = ['title', 'description', 'priority', 'category', 'due_date']
         widgets = {
             'due_date': forms.DateTimeInput(
                 attrs={

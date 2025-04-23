@@ -20,6 +20,7 @@ urlpatterns = [
     path('tasks/<int:user_id>/edit/<int:task_id>/', views.edit_task, name="edit_task"),
     path('tasks/<int:user_id>/delete/<int:task_id>/', views.delete_task, name="delete_task"),
     path('tasks/<int:user_id>/read/<int:task_id>/', views.read_task, name="read_task"),
+    path('tasks/test/<int:user_id>/', views.test_task_list, name="test_list"),
     path('admin/', admin.site.urls),
     path('__debug__/', include(debug_toolbar.urls)),
 ]

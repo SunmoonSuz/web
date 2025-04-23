@@ -13,6 +13,7 @@ from django.core.paginator import Paginator
 from django.core.cache import cache
 from django.utils import timezone
 from django.core.paginator import Paginator
+from django.db import connection
 
 
 # Create your views here.
@@ -106,7 +107,7 @@ def create_task(request, user_id):
         messages.error(request, f"Ошибка при создании задачи: {str(e)}")
         return render(request, "create_task_page.html",
                       {"form": task_form, "hash": user_hash, "id": user_id})
-    response = redirect(f'/tasks/{user_id}?hash={hash}')
+    response = redirect(f'/tasks/{user_id}?hash={user_hash}')
     response.set_cookie('new_task', 'true', max_age=86400)
 
     return response
@@ -169,11 +170,22 @@ def delete_task(request, user_id, task_id):
         messages.error(request, str(e))
         return JsonResponse(str(e), status=404)
     task.delete()
-    cache.delete(f"task{user_id}")
+    cache.delete(str(task_id))
     cache.delete("task_list")
     return redirect(f"http://127.0.0.1:8000/tasks/{user_id}?hash={user_hash}")
 
 
+def test_task_list(request, user_id):
+    user_hash = request.GET.get("hash")
+    try:
+        access.access(user_hash, user_id)
+    except ValueError as e:
+        return JsonResponse(str(e), status=403)
+    except Exception as e:
+        return JsonResponse(str(e), status=404)
+    current_user = model_operation.take_object(UserMan, user_id, None)
+    tasks = model_operation.test_task_list(current_user)
+    return JsonResponse(tasks)
 
 
 

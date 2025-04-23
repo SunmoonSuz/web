@@ -21,7 +21,11 @@ class Task(models.Model):
     created_at = models.DateTimeField()
     updated_at = models.DateTimeField()
     priority = models.IntegerField(default=0, choices=((i, i) for i in range(1, 6)))
+    category = models.TextField()
     due_date = models.DateTimeField()
+
+    class Meta:
+        db_table = 'todolist_task'
 
 class Category(models.Model):
     user = models.ForeignKey(UserMan, on_delete=models.CASCADE)

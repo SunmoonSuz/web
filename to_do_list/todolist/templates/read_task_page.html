@@ -137,7 +137,10 @@
                 </div>
             </div>
         </div>
-
+        <div class="date-group">
+                    <div class="info-label">Категория</div>
+                    <div class="info-value">{{ task.category }}</div>
+                </div>
         <div class="info-group">
             <div class="info-label">Дата окончания</div>
             <div class="info-value">{{ task.due_date|date:"DATETIME_FORMAT" }} </div>

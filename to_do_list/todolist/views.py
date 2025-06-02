@@ -17,7 +17,8 @@ from django.db import connection
 
 
 # Create your views here.
-
+def new_page(View):
+    pass
 
 class MainPage(View):
     @staticmethod
